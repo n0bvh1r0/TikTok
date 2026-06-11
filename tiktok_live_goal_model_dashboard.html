@@ -1,0 +1,480 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{padding:1rem 0}
+
+/* タブ */
+.top-tabs{display:flex;gap:4px;margin-bottom:18px;background:var(--color-background-secondary);padding:5px;border-radius:var(--border-radius-lg)}
+.top-tab{flex:1;font-size:12px;font-weight:500;padding:8px 10px;border-radius:var(--border-radius-md);border:none;background:transparent;color:var(--color-text-secondary);cursor:pointer;text-align:center;transition:all .15s}
+.top-tab.on{background:var(--color-background-primary);color:var(--color-text-primary);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.panel{display:none}.panel.on{display:block}
+
+/* ヒーローカード */
+.model-hero{border-radius:var(--border-radius-lg);padding:18px 22px;color:white;margin-bottom:16px}
+.mh-30{background:linear-gradient(135deg,#0e5c3a 0%,#1a7a5c 100%)}
+.mh-50{background:linear-gradient(135deg,#0e3a6e 0%,#7a1a5c 100%)}
+.mh-gap{background:linear-gradient(135deg,#5c3a0e 0%,#9c5c1a 100%)}
+.model-title{font-size:20px;font-weight:500;margin-bottom:3px}
+.model-sub{font-size:11px;color:rgba(255,255,255,.7);margin-bottom:12px}
+.model-stats{display:flex;gap:10px;flex-wrap:wrap}
+.ms-badge{font-size:11px;padding:3px 10px;background:rgba(255,255,255,.2);border:.5px solid rgba(255,255,255,.35);border-radius:var(--border-radius-md);color:white}
+
+/* セクション */
+.sec{margin-bottom:1.6rem}
+.stitle{font-size:12px;font-weight:500;color:var(--color-text-secondary);letter-spacing:.07em;text-transform:uppercase;border-bottom:.5px solid var(--color-border-tertiary);padding-bottom:6px;margin-bottom:12px}
+
+/* KPIグリッド */
+.kpi-grid{display:grid;gap:8px}
+.kpi-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px 14px;border-left:3px solid transparent}
+.kpi-card.green{border-left-color:#1D9E75}.kpi-card.blue{border-left-color:#378ADD}
+.kpi-card.amber{border-left-color:#BA7517}.kpi-card.red{border-left-color:#D85A30}
+.kpi-card.purple{border-left-color:#7F77DD}
+.kpi-lbl{font-size:10px;color:var(--color-text-secondary);margin-bottom:2px}
+.kpi-val{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.kpi-why{font-size:10px;color:var(--color-text-secondary);margin-top:3px;line-height:1.5}
+
+/* テーブル */
+.tbl{width:100%;border-collapse:collapse;font-size:11px;margin:6px 0}
+.tbl th{font-size:10px;font-weight:500;color:var(--color-text-secondary);text-align:left;padding:4px 7px;border-bottom:.5px solid var(--color-border-tertiary)}
+.tbl td{padding:5px 7px;border-bottom:.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .num{font-variant-numeric:tabular-nums;font-weight:500}
+.tbl .up{color:#0F6E56;font-weight:500}.tbl .dn{color:#993C1D;font-weight:500}
+
+/* バー比較 */
+.bar-row{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:11px}
+.blbl{text-align:right;color:var(--color-text-secondary);font-size:10px;flex-shrink:0;width:72px}
+.btrk{flex:1;height:14px;background:var(--color-background-primary);border-radius:3px;overflow:hidden;border:.5px solid var(--color-border-tertiary)}
+.bfil{height:100%;border-radius:3px;transition:width .4s}
+.bval{width:64px;font-size:10.5px;color:var(--color-text-primary);font-variant-numeric:tabular-nums}
+
+/* カード */
+.card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px}
+.card-t{font-size:12px;font-weight:500;margin-bottom:8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+
+/* Verdict */
+.vb{border-radius:var(--border-radius-md);padding:9px 13px;margin-bottom:10px;font-size:11px;line-height:1.7}
+.vb-green{background:#E1F5EE;border:.5px solid #5DCAA5;color:#0F6E56}
+.vb-blue{background:#E6F1FB;border:.5px solid #85B7EB;color:#185FA5}
+.vb-amber{background:#FAEEDA;border:.5px solid #EF9F27;color:#854F0B}
+.vb-red{background:#FAECE7;border:.5px solid #F09797;color:#993C1D}
+.vb-purple{background:#EDE7F6;border:.5px solid #9575CD;color:#4527A0}
+
+/* アクションリスト */
+.act-list{list-style:none}
+.act-list li{display:flex;gap:9px;padding:9px 0;border-bottom:.5px solid var(--color-border-tertiary)}
+.act-list li:last-child{border-bottom:none}
+.act-num{font-size:15px;font-weight:500;min-width:18px;padding-top:1px}
+.act-t{font-weight:500;color:var(--color-text-primary);margin-bottom:2px;font-size:11.5px}
+.act-d{color:var(--color-text-secondary);font-size:10.5px;line-height:1.55}
+.badge{display:inline-block;font-size:9.5px;font-weight:500;padding:1px 6px;border-radius:var(--border-radius-md);margin-left:4px}
+.bg{background:#E1F5EE;color:#0F6E56}.br{background:#FAECE7;color:#993C1D}
+.bb{background:#E6F1FB;color:#185FA5}.ba{background:#FAEEDA;color:#854F0B}
+
+/* ギャップ矢印 */
+.gap-row{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:11px}
+.gap-row:last-child{border-bottom:none}
+.gap-label{width:100px;color:var(--color-text-secondary);flex-shrink:0}
+.gap-from{font-weight:500;color:var(--color-text-primary);width:56px;text-align:right}
+.gap-arrow{color:var(--color-text-tertiary);font-size:13px;width:18px;text-align:center}
+.gap-to{font-weight:500;width:56px}
+.gap-to.up{color:#0F6E56}.gap-to.dn{color:#993C1D}
+.gap-pct{font-size:10px;flex:1;text-align:right}
+.gap-pct.up{color:#0F6E56}.gap-pct.dn{color:#993C1D}
+
+/* チャートラップ */
+.chart-wrap{position:relative;width:100%;height:220px}
+</style>
+
+<div class="wrap">
+
+<!-- タブ -->
+<div class="top-tabs">
+  <button class="top-tab on" data-p="0">① 月30万ダイヤ モデル</button>
+  <button class="top-tab" data-p="1">② 月50万ダイヤ モデル</button>
+  <button class="top-tab" data-p="2">③ ギャップ分析</button>
+  <button class="top-tab" data-p="3">④ 最優先改善TOP5</button>
+</div>
+
+<!-- ══════════ PANEL 0: 月30万モデル ══════════ -->
+<div class="panel on" id="p0">
+  <div class="model-hero mh-30">
+    <div style="font-size:11px;color:rgba(255,255,255,.6);margin-bottom:4px">データから逆算した目標モデル ／ 実績ベース</div>
+    <div class="model-title">月30万ダイヤ達成モデル</div>
+    <div class="model-sub">実績：37/62ライバー月が達成（59.7%）。現在の成長層上位〜エース層への到達ライン。</div>
+    <div class="model-stats">
+      <span class="ms-badge">📅 月44配信</span>
+      <span class="ms-badge">⏱ 月123h</span>
+      <span class="ms-badge">💎 ダイヤ/時間 2,050</span>
+      <span class="ms-badge">🎯 IMP/時間 2,050</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="stitle">配信頻度・時間設計</div>
+    <div class="three">
+      <div class="kpi-card green">
+        <div class="kpi-lbl">月間配信数</div>
+        <div class="kpi-val">44本</div>
+        <div class="kpi-why">週11本ペース。中央値(27本)の+63%。配信量が収益総量を決める最大要因。</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-lbl">1配信あたり時間</div>
+        <div class="kpi-val">2.8h</div>
+        <div class="kpi-why">2〜4h帯がダイヤ/時間・IMP効率ともに最適。〜1h・6h+は非効率。</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-lbl">月間総配信時間</div>
+        <div class="kpi-val">123h</div>
+        <div class="kpi-why">123h × 2,054ダイヤ/時間 = 252,642ダイヤ。残り47,358は高単価ギフターで補填。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="stitle">推奨配信時間帯（30万達成ライバーの実績分布）</div>
+    <div class="card" style="margin-bottom:10px">
+      <div class="bar-row"><span class="blbl">夜（21〜24時）</span><div class="btrk"><div class="bfil" style="width:100%;background:#1D9E75"></div></div><span class="bval">42% ★主軸</span></div>
+      <div class="bar-row"><span class="blbl">昼（11〜15時）</span><div class="btrk"><div class="bfil" style="width:59%;background:#5DCAA5"></div></div><span class="bval">25% 新規獲得</span></div>
+      <div class="bar-row"><span class="blbl">夕方（16〜20時）</span><div class="btrk"><div class="bfil" style="width:28%;background:#85B7EB"></div></div><span class="bval">12% 拡散補強</span></div>
+      <div class="bar-row"><span class="blbl">深夜（1〜5時）</span><div class="btrk"><div class="bfil" style="width:26%;background:#B5D4F4"></div></div><span class="bval">11% 収益特化</span></div>
+      <div class="bar-row"><span class="blbl">朝（6〜10時）</span><div class="btrk"><div class="bfil" style="width:25%;background:#D3D1C7"></div></div><span class="bval">10% IMP拡大</span></div>
+    </div>
+    <div class="vb vb-amber">夜帯が42%と中心。ただし夜帯だけに集中する低収益層（44%が夜帯集中）との違いは「昼・夕方・深夜への分散」にある。夜を主軸にしつつ、週2〜3本を昼・夕方帯に振り分けることがIMP拡大とフォロワー獲得に直結する。</div>
+  </div>
+
+  <div class="sec">
+    <div class="stitle">必要KPI一覧（実績中央値から逆算）</div>
+    <table class="tbl">
+      <thead><tr><th>カテゴリ</th><th>指標</th><th>目標値</th><th>中央値</th><th>差分</th><th>なぜこの数値が必要か</th></tr></thead>
+      <tbody>
+        <tr><td>流入</td><td>IMP/時間</td><td class="num up">2,050</td><td class="num">1,867</td><td class="up">+10%</td><td>PCU20人超を維持するための最低IMP水準</td></tr>
+        <tr><td>流入</td><td>視聴者/時間</td><td class="num up">112</td><td class="num">105</td><td class="up">+7%</td><td>ギフター絶対数の母数確保に必要</td></tr>
+        <tr><td>定着</td><td>PCU</td><td class="num up">22人</td><td class="num">19人</td><td class="up">+16%</td><td>PCU21人超がIMP/時間の臨界点。2,100超を安定確保</td></tr>
+        <tr><td>定着</td><td>ACU</td><td class="num up">12人</td><td class="num">11人</td><td class="up">+9%</td><td>ACU11人超でIMP/時間2,000突破の条件</td></tr>
+        <tr><td>定着</td><td>ACU/PCU比</td><td class="num up">0.60</td><td class="num">0.59</td><td class="up">+2%</td><td>同時視聴者の定着率。コメント率との連動が鍵</td></tr>
+        <tr><td>定着</td><td>avg視聴時間</td><td class="num">4.1分</td><td class="num">4.7分</td><td class="dn">−13%</td><td>IMP拡大により初見増加→下がりやすい。3.5分以上維持が目安</td></tr>
+        <tr><td>エンゲ</td><td>コメント率</td><td class="num">13.3%</td><td class="num">16.5%</td><td class="dn">−19%</td><td>IMP上位帯ではコメント率が下がる傾向。13%以上で定着良好</td></tr>
+        <tr><td>収益</td><td>課金率</td><td class="num">10.4%</td><td class="num">12.3%</td><td class="dn">−15%</td><td>視聴者数増加で希薄化。ギフト数で補う設計</td></tr>
+        <tr><td>収益</td><td>ダイヤ/時間</td><td class="num up">2,050</td><td class="num">1,536</td><td class="up">+34%</td><td>123h × 2,050 = 252,150ダイヤ。高単価率15+で30万達成</td></tr>
+        <tr><td>収益</td><td>高単価率</td><td class="num up">13.5</td><td class="num">13.6</td><td>≒</td><td>中央値水準で可。視聴者数増加で収益補填</td></tr>
+        <tr><td>収益</td><td>視聴者単価</td><td class="num up">12.5</td><td class="num">13.3</td><td class="dn">−6%</td><td>視聴者単価より総視聴者数の増加で収益確保</td></tr>
+        <tr><td>収益</td><td>ギフト数/時間</td><td class="num up">72〜98</td><td class="num">86</td><td>目標範囲内</td><td>1配信あたり200〜275ギフト。課金文化の醸成が前提</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec">
+    <div class="stitle">月30万ダイヤ達成ライバーの行動特徴</div>
+    <div class="vb vb-green">
+      <strong>行動パターン①：週11本・2〜4hの高密度配信を習慣化している</strong><br>
+      月44本（週11本）は1日おき＋αのペース。配信を「仕事の習慣」として位置づけ、スキップしない体制を作っている。1配信あたり2.8hは「長すぎず短すぎず」の最適ゾーン。
+    </div>
+    <div class="vb vb-green">
+      <strong>行動パターン②：夜メイン×昼サブの「二刀流時間帯」を意識して運用している</strong><br>
+      夜は課金率・ダイヤ/時間が高く収益重視。昼・夕方はIMP/時間・フォロー率が高く新規獲得重視。意図的に役割分担し、夜配信だけに依存していない。
+    </div>
+    <div class="vb vb-green">
+      <strong>行動パターン③：PCU20人超えを序盤10分で達成する「開幕設計」がある</strong><br>
+      PCU21人がIMP拡大の臨界点。事前告知（SNS・前回配信での予告）・常連ファンへの個別通知など、配信開始直後に人が集まる仕組みを持っている。
+    </div>
+    <div class="vb vb-amber">
+      <strong>行動パターン④：ギフトゴールを常設し、コメント率13%以上を維持している</strong><br>
+      「あとXダイヤで〇〇します」ゴールを配信中に常時表示。コメントへの積極的な反応（名前呼び・即レス）で視聴者の参加意欲を維持。課金率が下がっても「1本の高単価ギフト」で補填できる体制を持つ。
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PANEL 1: 月50万モデル ══════════ -->
+<div class="panel" id="p1">
+  <div class="model-hero mh-50">
+    <div style="font-size:11px;color:rgba(255,255,255,.6);margin-bottom:4px">データから逆算した目標モデル ／ 実績ベース</div>
+    <div class="model-title">月50万ダイヤ達成モデル</div>
+    <div class="model-sub">実績：20/62ライバー月が達成（32.3%）。事務所エース層の水準。</div>
+    <div class="model-stats">
+      <span class="ms-badge">📅 月46配信</span>
+      <span class="ms-badge">⏱ 月128h</span>
+      <span class="ms-badge">💎 ダイヤ/時間 2,548</span>
+      <span class="ms-badge">🎯 IMP/時間 2,214</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="stitle">配信頻度・時間設計</div>
+    <div class="three">
+      <div class="kpi-card blue">
+        <div class="kpi-lbl">月間配信数</div>
+        <div class="kpi-val">46本</div>
+        <div class="kpi-why">週11〜12本。30万モデルとほぼ同頻度。差は「ダイヤ/時間の質」にある。</div>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-lbl">1配信あたり時間</div>
+        <div class="kpi-val">2.8h</div>
+        <div class="kpi-why">30万モデルと同じ2〜4h帯。50万は「量より質」で高単価率を上げることが鍵。</div>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-lbl">月間総配信時間</div>
+        <div class="kpi-val">128h</div>
+        <div class="kpi-why">128h × 2,548ダイヤ/時間 = 326,144ダイヤ。残り173,856は高単価ギフターで補填。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="stitle">推奨配信時間帯（50万達成ライバーの実績分布）</div>
+    <div class="card" style="margin-bottom:10px">
+      <div class="bar-row"><span class="blbl">夜（21〜24時）</span><div class="btrk"><div class="bfil" style="width:100%;background:#378ADD"></div></div><span class="bval">43% ★主軸</span></div>
+      <div class="bar-row"><span class="blbl">昼（11〜15時）</span><div class="btrk"><div class="bfil" style="width:48%;background:#5DCAA5"></div></div><span class="bval">21% 新規獲得</span></div>
+      <div class="bar-row"><span class="blbl">朝（6〜10時）</span><div class="btrk"><div class="bfil" style="width:39%;background:#85B7EB"></div></div><span class="bval">17% IMP特化</span></div>
+      <div class="bar-row"><span class="blbl">深夜（1〜5時）</span><div class="btrk"><div class="bfil" style="width:23%;background:#B5D4F4"></div></div><span class="bval">10% 収益特化</span></div>
+      <div class="bar-row"><span class="blbl">夕方（16〜20時）</span><div class="btrk"><div class="bfil" style="width:22%;background:#D3D1C7"></div></div><span class="bval">10% 拡散補強</span></div>
+    </div>
+    <div class="vb vb-blue">30万モデルとの最大の違いは「朝帯比率が10%→17%に拡大」している点。朝帯はIMP/時間2,158（事務所最高）で新規フォロワーを積み上げる。フォロワーベースが大きくなるほど夜配信の固定ファン数が増え、高額ギフターが現れる確率が上昇する。</div>
+  </div>
+
+  <div class="sec">
+    <div class="stitle">必要KPI一覧（実績データから逆算）</div>
+    <table class="tbl">
+      <thead><tr><th>カテゴリ</th><th>指標</th><th>目標値</th><th>30万値</th><th>差分</th><th>なぜこの数値が必要か</th></tr></thead>
+      <tbody>
+        <tr><td>流入</td><td>IMP/時間</td><td class="num up">2,214</td><td class="num">2,050</td><td class="up">+8%</td><td>視聴者数増加→ギフター絶対数の母数拡大</td></tr>
+        <tr><td>流入</td><td>視聴者/時間</td><td class="num up">127</td><td class="num">112</td><td class="up">+13%</td><td>視聴者127人/時間 × 12.6%課金率 = 16人ギフター</td></tr>
+        <tr><td>定着</td><td>PCU</td><td class="num up">25人</td><td class="num">22人</td><td class="up">+14%</td><td>PCU25人超でIMP/時間2,200超を安定確保</td></tr>
+        <tr><td>定着</td><td>ACU</td><td class="num up">15人</td><td class="num">12人</td><td class="up">+25%</td><td>ACU15人超で「場の賑わい感」が生まれ課金意欲が向上</td></tr>
+        <tr><td>定着</td><td>ACU/PCU比</td><td class="num up">0.618</td><td class="num">0.600</td><td class="up">+3%</td><td>コメント率29%以上の配信でこの水準を達成</td></tr>
+        <tr><td>定着</td><td>avg視聴時間</td><td class="num up">5.1分</td><td class="num">4.1分</td><td class="up">+24%</td><td>5分以上の滞在で「この人の配信好き」という認識が形成。課金意欲に直結</td></tr>
+        <tr><td>エンゲ</td><td>コメント率</td><td class="num up">17.3%</td><td class="num">13.3%</td><td class="up">+30%</td><td>30万との最大差異。コメント活性化が高額ギフターの背中を押す</td></tr>
+        <tr><td>収益</td><td>課金率</td><td class="num up">12.7%</td><td class="num">10.4%</td><td class="up">+22%</td><td>課金者数の絶対増加がギフト競争を生む</td></tr>
+        <tr><td>収益</td><td>ダイヤ/時間</td><td class="num up">2,548</td><td class="num">2,050</td><td class="up">+24%</td><td>128h × 2,548 = 326,144。残り173,856を高単価率17.5で補填</td></tr>
+        <tr><td>収益</td><td>高単価率</td><td class="num up">17.5</td><td class="num">13.5</td><td class="up">+30%</td><td>30万との最大収益差。高額ギフター1人の存在が50万への分岐点</td></tr>
+        <tr><td>収益</td><td>視聴者単価</td><td class="num up">18.2</td><td class="num">12.5</td><td class="up">+46%</td><td>高単価率向上の結果として視聴者単価が上昇</td></tr>
+        <tr><td>収益</td><td>ギフト数/時間</td><td class="num up">114</td><td class="num">72〜98</td><td class="up">+16〜58%</td><td>ギフト文化の醸成が必須。ランキング演出で競争意欲を引き出す</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec">
+    <div class="stitle">月50万ダイヤ達成ライバーの行動特徴</div>
+    <div class="vb vb-blue">
+      <strong>行動特徴①：「フォロワーベース構築」を30万モデルより重視している</strong><br>
+      朝帯比率17%（30万モデルの10%より+7pt）。朝帯はIMP/時間2,158と最高効率でフォロワー獲得に強い。フォロワーが増えるほど夜配信の同時視聴者（PCU25人）が安定し、高額ギフターが現れる確率が高まる。「毎月フォロワーを積み上げる→夜配信の収益が増える」の複利効果を意識している。
+    </div>
+    <div class="vb vb-blue">
+      <strong>行動特徴②：コメント率17.3%を維持する「参加型コンテンツ」を持っている</strong><br>
+      30万モデルとの最大差はコメント率（13.3%→17.3%、+30%）。「視聴者全員が参加できる問いかけ」「コール&レスポンス」「名前を呼ぶ文化」が定着しており、視聴者の滞在時間がavg5.1分（30万モデルの4.1分より+24%）と長い。avg5分を超えると「推し」認定が形成され高額ギフトに繋がりやすい。
+    </div>
+    <div class="vb vb-blue">
+      <strong>行動特徴③：高単価率17.5を生む「ギフト文化の構築」がある</strong><br>
+      ギフトランキングの演出・ギフトゴールの常設・高額ギフターへの特別なリアクション（名前呼び・感謝の言語化・特別コンテンツ解放）が習慣化。1人の超高額ギフターが来るだけでダイヤ/時間が数倍になる構造（高単価率×視聴者単価との相関0.81〜0.96）を理解し、その環境を整備している。
+    </div>
+    <div class="vb vb-purple">
+      <strong>行動特徴④：データを見て改善する習慣がある</strong><br>
+      月30万→50万の最大のハードルは「質的変化」にある。配信数・時間はほぼ同じ（46本・128h）なのに収益が67%増（30万→50万）になる理由は、コメント率・高単価率・avg視聴時間の3指標が全て改善しているから。これらは「感覚」だけでは改善できず、毎週データを確認して施策を修正するサイクルが不可欠。
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PANEL 2: ギャップ分析 ══════════ -->
+<div class="panel" id="p2">
+  <div class="model-hero mh-gap">
+    <div style="font-size:11px;color:rgba(255,255,255,.6);margin-bottom:4px">データから逆算したギャップ分析</div>
+    <div class="model-title">中央値ライバーとのギャップ</div>
+    <div class="model-sub">現在地：月10〜30万ダイヤ（配信数27本・総時間74.5h）から各目標へ</div>
+    <div class="model-stats">
+      <span class="ms-badge">現在 月10〜30万帯</span>
+      <span class="ms-badge">→ 月30万 ＝ 量の変革</span>
+      <span class="ms-badge">→ 月50万 ＝ 質の変革</span>
+    </div>
+  </div>
+
+  <!-- チャート -->
+  <div class="sec">
+    <div class="stitle">月間ダイヤ × 配信量・質の関係</div>
+    <div class="chart-wrap"><canvas id="gap-chart" role="img" aria-label="月間ダイヤ帯別KPI比較チャート"></canvas></div>
+  </div>
+
+  <div class="two" style="margin-bottom:16px">
+    <div>
+      <div class="sec" style="margin-bottom:0">
+        <div class="stitle">中央値 → 月30万へのギャップ</div>
+        <div class="card">
+          <div class="gap-row"><span class="gap-label">配信数</span><span class="gap-from">27本</span><span class="gap-arrow">→</span><span class="gap-to up">44本</span><span class="gap-pct up">+63%</span></div>
+          <div class="gap-row"><span class="gap-label">月間総時間</span><span class="gap-from">74.5h</span><span class="gap-arrow">→</span><span class="gap-to up">122.9h</span><span class="gap-pct up">+65%</span></div>
+          <div class="gap-row"><span class="gap-label">PCU</span><span class="gap-from">15人</span><span class="gap-arrow">→</span><span class="gap-to up">22人</span><span class="gap-pct up">+47%</span></div>
+          <div class="gap-row"><span class="gap-label">ACU</span><span class="gap-from">8人</span><span class="gap-arrow">→</span><span class="gap-to up">12人</span><span class="gap-pct up">+50%</span></div>
+          <div class="gap-row"><span class="gap-label">IMP/時間</span><span class="gap-from">1,426</span><span class="gap-arrow">→</span><span class="gap-to up">2,050</span><span class="gap-pct up">+44%</span></div>
+          <div class="gap-row"><span class="gap-label">視聴者/時間</span><span class="gap-from">89</span><span class="gap-arrow">→</span><span class="gap-to up">112</span><span class="gap-pct up">+26%</span></div>
+          <div class="gap-row"><span class="gap-label">ダイヤ/時間</span><span class="gap-from">1,237</span><span class="gap-arrow">→</span><span class="gap-to up">2,050</span><span class="gap-pct up">+66%</span></div>
+          <div class="gap-row"><span class="gap-label">コメント率</span><span class="gap-from">15.2%</span><span class="gap-arrow">→</span><span class="gap-to dn">13.3%</span><span class="gap-pct dn">−12%（許容）</span></div>
+          <div class="gap-row"><span class="gap-label">課金率</span><span class="gap-from">12.2%</span><span class="gap-arrow">→</span><span class="gap-to dn">10.4%</span><span class="gap-pct dn">−15%（許容）</span></div>
+          <div class="gap-row"><span class="gap-label">高単価率</span><span class="gap-from">13.8</span><span class="gap-arrow">→</span><span class="gap-to">13.5</span><span class="gap-pct">≒ 維持</span></div>
+        </div>
+        <div class="vb vb-amber" style="margin-top:8px;font-size:10.5px">
+          <strong>30万への本質：「量の変革」。</strong>配信数+63%・総時間+65%が最大のドライバー。KPIを大きく変えなくても、配信量さえ増やせば30万は射程に入る。コメント率・課金率は下がっても構わない（視聴者増加の自然現象）。
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="sec" style="margin-bottom:0">
+        <div class="stitle">月30万 → 月50万へのギャップ</div>
+        <div class="card">
+          <div class="gap-row"><span class="gap-label">配信数</span><span class="gap-from">44本</span><span class="gap-arrow">→</span><span class="gap-to up">46本</span><span class="gap-pct up">+5%（ほぼ同じ）</span></div>
+          <div class="gap-row"><span class="gap-label">月間総時間</span><span class="gap-from">122.9h</span><span class="gap-arrow">→</span><span class="gap-to up">127.6h</span><span class="gap-pct up">+4%（ほぼ同じ）</span></div>
+          <div class="gap-row"><span class="gap-label">PCU</span><span class="gap-from">22人</span><span class="gap-arrow">→</span><span class="gap-to up">25人</span><span class="gap-pct up">+14%</span></div>
+          <div class="gap-row"><span class="gap-label">ACU</span><span class="gap-from">12人</span><span class="gap-arrow">→</span><span class="gap-to up">15人</span><span class="gap-pct up">+25%</span></div>
+          <div class="gap-row"><span class="gap-label">IMP/時間</span><span class="gap-from">2,050</span><span class="gap-arrow">→</span><span class="gap-to up">2,214</span><span class="gap-pct up">+8%</span></div>
+          <div class="gap-row"><span class="gap-label">avg視聴時間</span><span class="gap-from">4.1分</span><span class="gap-arrow">→</span><span class="gap-to up">5.1分</span><span class="gap-pct up">+25%</span></div>
+          <div class="gap-row"><span class="gap-label">コメント率</span><span class="gap-from">13.3%</span><span class="gap-arrow">→</span><span class="gap-to up">17.3%</span><span class="gap-pct up">+30%</span></div>
+          <div class="gap-row"><span class="gap-label">課金率</span><span class="gap-from">10.4%</span><span class="gap-arrow">→</span><span class="gap-to up">12.7%</span><span class="gap-pct up">+22%</span></div>
+          <div class="gap-row"><span class="gap-label">ダイヤ/時間</span><span class="gap-from">2,050</span><span class="gap-arrow">→</span><span class="gap-to up">2,548</span><span class="gap-pct up">+24%</span></div>
+          <div class="gap-row"><span class="gap-label">高単価率</span><span class="gap-from">13.5</span><span class="gap-arrow">→</span><span class="gap-to up">17.5</span><span class="gap-pct up">+30%</span></div>
+        </div>
+        <div class="vb vb-blue" style="margin-top:8px;font-size:10.5px">
+          <strong>50万への本質：「質の変革」。</strong>配信数は+5%（ほぼ同じ）なのに収益は+67%。コメント率+30%・高単価率+30%・視聴者単価+46%・avg視聴時間+25%が全て改善している。コンテンツ設計・ギフト文化・定着施策の質が30万との決定的な差。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ダイヤ収益の逆算シミュレーション -->
+  <div class="sec">
+    <div class="stitle">収益逆算シミュレーション（実データ検証）</div>
+    <table class="tbl">
+      <thead><tr><th>目標</th><th>配信数</th><th>総時間</th><th>ダイヤ/時間</th><th>基本収益</th><th>高単価補填</th><th>合計推計</th></tr></thead>
+      <tbody>
+        <tr><td>月10〜30万</td><td>27本</td><td>74.5h</td><td>1,237</td><td>92,157</td><td>+107,843</td><td class="num">〜200,000</td></tr>
+        <tr><td>月30万</td><td>44本</td><td>122.9h</td><td>2,054</td><td>252,437</td><td>+47,563</td><td class="num up">300,000</td></tr>
+        <tr><td>月50万</td><td>46本</td><td>127.6h</td><td>2,548</td><td>325,125</td><td>+174,875</td><td class="num up">500,000</td></tr>
+      </tbody>
+    </table>
+    <div class="vb vb-purple" style="font-size:10.5px">
+      <strong>重要インサイト：</strong>月30万は「基本収益252,437 + 高単価補填47,563」と比較的安定した構造。月50万は「基本収益325,125 + 高単価補填174,875」と高単価ギフターへの依存が高い。50万達成には超高額ギフター（高単価率50+の配信を月5〜10本）の存在が実質必須。
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PANEL 3: 最優先改善TOP5 ══════════ -->
+<div class="panel" id="p3">
+  <div class="sec">
+    <div class="stitle">最優先改善項目 TOP5（中央値ライバーが30万・50万を目指す場合）</div>
+
+    <div class="chart-wrap" style="height:200px;margin-bottom:14px">
+      <canvas id="priority-chart" role="img" aria-label="改善優先度チャート"></canvas>
+    </div>
+
+    <ol class="act-list">
+      <li>
+        <div class="act-num" style="color:#D85A30">1</div>
+        <div>
+          <div class="act-t">配信数を月27本→44本へ増加（+63%） ― 30万への最速ルート <span class="badge br">最大インパクト</span></div>
+          <div class="act-d">データが示す最重要事実：月30万と月10〜30万の最大の違いは「配信数（44本 vs 27本）と総時間（122.9h vs 74.5h）」であり、KPIの差は二次的。まず週6〜7本→週10〜11本へ配信ペースを上げることが全改善の前提。具体的には「週5本固定＋余力で+1〜2本」のルーティンを作る。配信時間は1本あたり2〜4h（現状2.8hを維持）。月44本×2.8h=123hが目標総時間。</div>
+        </div>
+      </li>
+      <li>
+        <div class="act-num" style="color:#BA7517">2</div>
+        <div>
+          <div class="act-t">PCU15人→22人へ引き上げ ― IMP拡大の臨界点突破 <span class="badge ba">高インパクト</span></div>
+          <div class="act-d">PCU21人超がIMP/時間2,100超の臨界点（実データ：PCU21〜25人帯でIMP/時間2,061）。現状PCU15人帯のIMP/時間は1,385。PCU22人達成でIMP/時間が+49%改善し、視聴者数の増加→ダイヤ/時間の増加に連鎖する。具体策：①配信前のSNS告知（30分前・1時間前）②配信開始時の常連ファンへのDM通知 ③前回配信の最後に次回配信の日時を予告 ④コラボ配信で相互視聴者を呼び込む。目標：配信開始後10分以内にPCU22人超え。</div>
+        </div>
+      </li>
+      <li>
+        <div class="act-num" style="color:#2471a3">3</div>
+        <div>
+          <div class="act-t">時間帯を夜一辺倒から「夜42%＋昼25%」の二刀流へ <span class="badge bb">即効</span></div>
+          <div class="act-d">現在の中央値ライバー（月10〜30万）は夜帯への集中度が高い。しかし30万達成ライバーは夜42%・昼25%と分散させている。昼帯はIMP/時間1,943（夜帯1,718より+13%）・フォロー率1.53%（夜帯1.05%より+46%）と新規流入・フォロワー獲得に圧倒的に有利。週10〜11本のうち「夜6〜7本＋昼2〜3本＋深夜1本」を目安に時間帯を再設計する。昼配信追加のみで月間フォロワー獲得数が20〜30%増加する可能性がある。</div>
+        </div>
+      </li>
+      <li>
+        <div class="act-num" style="color:#0e7c5a">4</div>
+        <div>
+          <div class="act-t">高単価率13.5→17.5へ引き上げ ― 30万→50万への収益エンジン <span class="badge bg">50万専用</span></div>
+          <div class="act-d">30万→50万の収益差（+67%）のうち、配信量増加で説明できるのは+5%のみ。残りの+62%は高単価率・視聴者単価・コメント率の「質的改善」が担う。高単価率を13.5→17.5へ上げるための具体策：①「ギフトランキング」を常時画面表示し競争意欲を刺激 ②高額ギフトへの即時特別演出（専用BGM・エフェクト・名前コール）③「ギフトゴール」を毎配信冒頭に設定し達成後に即次ゴールへ ④月間ランキング制度を設け常連高額ギフターを特別扱いする文化を醸成。</div>
+        </div>
+      </li>
+      <li>
+        <div class="act-num" style="color:#7F77DD">5</div>
+        <div>
+          <div class="act-t">avg視聴時間4.1分→5.1分・コメント率13%→17%へ同時改善 ― 定着エンジンの強化 <span class="badge bb">50万専用</span></div>
+          <div class="act-d">30万→50万の質的変化の核心。avg視聴時間5分超えは「推し認定」の心理的閾値であり、課金意欲の急上昇ポイント（実データ：avg視聴5分超の配信はダイヤ/時間が4分未満配信より平均+38%）。具体策：①配信冒頭3分の「強いつかみ」（衝撃発表・クイズ・悩み相談受付など）で離脱を防止 ②1〜2分に1回の問いかけ（「今日どんな曜日だった？」「好きな〇〇教えて」）でコメント参加を促進 ③コメントへの即時名前呼び返しでリピーターを形成 ④「30分後に〇〇します」予告で離脱防止。</div>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="sec">
+    <div class="stitle">改善ロードマップ（推奨順序）</div>
+    <div class="vb vb-amber">
+      <strong>STEP 1（1〜2ヶ月目）：量の変革で30万を突破</strong><br>
+      配信数を週7本→11本に増加。時間帯を夜一辺倒から昼・夕方を週3本追加。PCU22人超えを配信開始10分の目標に設定。この3点だけで中央値ライバーが30万達成ラインに乗る可能性が高い。
+    </div>
+    <div class="vb vb-blue">
+      <strong>STEP 2（3〜4ヶ月目）：質の変革で50万へ</strong><br>
+      配信量が安定したら「コメント参加型コンテンツ」「ギフトゴール常設」「高額ギフター特別演出」の3点を導入。avg視聴時間5分・コメント率17%・高単価率17.5を目標KPIとして毎週モニタリング。
+    </div>
+    <div class="vb vb-purple">
+      <strong>STEP 3（5ヶ月目以降）：フォロワーベースで安定収益へ</strong><br>
+      朝帯配信を週2本に増やしフォロワーを積み上げる。フォロワー1,000人増ごとにPCUが自然に上昇し、夜配信の収益が連動して増加する複利効果が生まれる。月50万の安定達成には「毎月500〜1,000フォロワー純増」が現実的な目安。
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// タブ切り替え
+document.querySelector('.top-tabs').addEventListener('click', e => {
+  const btn = e.target.closest('[data-p]'); if(!btn) return;
+  document.querySelectorAll('.top-tab').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('p' + btn.dataset.p).classList.add('on');
+});
+
+// ギャップチャート
+const gapCtx = document.getElementById('gap-chart').getContext('2d');
+new Chart(gapCtx, {
+  type: 'bar',
+  data: {
+    labels: ['配信数(本)', '総時間(h/10)', 'IMP/時間(/100)', '視聴者/時間', 'PCU(人)', 'ACU(人)', 'ダイヤ/時間(/100)', '高単価率', '課金率(%)×10'],
+    datasets: [
+      { label: '中央値(10〜30万)', data: [27, 7.45, 14.26, 89.2, 15, 8, 12.37, 13.8, 1.22], backgroundColor: '#B5D4F4', borderWidth: 0 },
+      { label: '月30万', data: [44, 12.29, 20.5, 112, 22, 12, 20.54, 13.5, 1.04], backgroundColor: '#1D9E75', borderWidth: 0 },
+      { label: '月50万', data: [46, 12.76, 22.14, 126.7, 25, 15, 25.48, 17.5, 1.27], backgroundColor: '#378ADD', borderWidth: 0 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, boxWidth: 10, padding: 8 } } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { grid: { color: 'rgba(128,128,128,.1)' }, ticks: { font: { size: 9 } } }
+    }
+  }
+});
+
+// 優先度チャート（横棒）
+const prCtx = document.getElementById('priority-chart').getContext('2d');
+new Chart(prCtx, {
+  type: 'bar',
+  data: {
+    labels: ['1.配信数増加', '2.PCU引き上げ', '3.時間帯分散', '4.高単価率向上', '5.定着・コメント強化'],
+    datasets: [
+      { label: '30万へのインパクト', data: [95, 80, 65, 30, 40], backgroundColor: '#1D9E75', borderWidth: 0 },
+      { label: '50万へのインパクト', data: [20, 55, 50, 85, 90], backgroundColor: '#378ADD', borderWidth: 0 },
+    ]
+  },
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, boxWidth: 10, padding: 8 } },
+               tooltip: { callbacks: { label: c => c.dataset.label + ': ' + c.raw + '%' } } },
+    scales: {
+      x: { min: 0, max: 100, ticks: { callback: v => v + '%', font: { size: 9 } }, grid: { color: 'rgba(128,128,128,.1)' } },
+      y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+    }
+  }
+});
+</script>
